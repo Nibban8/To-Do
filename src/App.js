@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 
+
 import Pen from "./icons/Pen";
 import Trash from "./icons/Trash";
 import Disk from "./icons/Disk";
 
-function App() {
-  const tk = ["Task 1", "Task 2"];
+import {Button , Input} from 'reactstrap'
 
-  const [tasks, setTasks] = useState(tk);
+function App() {
+
+  const [tasks, setTasks] = useState([]);
   const [nuTask, setNuTask] = useState("");
   const [selected, setSelected] = useState(-1);
   const [editing, setEditing] = useState(false);
@@ -46,45 +48,44 @@ function App() {
       <h1>LKMX - Front-End</h1>
 
       <div className="todo-card">
-        <h3>To Do List</h3>
-        <div>
-          <input
-            onFocus={() => {setSelected(-1) ; setEditing(false)}}
+        <h2>To Do List</h2>
+        <div className="todo-add mb-4">
+          <Input
+          placeholder="Escribe una tarea"
+            onFocus={() => { setNuTask(""); setSelected(-1) ; setEditing(false)}}
             value={editing ? "" : nuTask}
             onChange={(e) => setNuTask(e.target.value)}
             type="text"
           />
-          <button onClick={handleAdd}>Agregar</button>
+          <Button color="primary" onClick={handleAdd}>Agregar</Button>
         </div>
 
         {tasks.map((task, index) => (
-          <div key={index}>
+          <div className="todo-list" key={index}>
             {editing && index === selected ? (
-              <>
-                <input
+              <div className="todo-edit">
+                <Input
                   type="text"
                   value={nuTask}
                   onChange={(e) => setNuTask(e.target.value)}
                 />
-                <button onClick={() => handleSave(index)}>
+                <Button className="p-1 mx-1" outline={true} color="secondary"  onClick={() => handleSave(index)}>
                   <Disk />
-                </button>
-              </>
+                </Button>
+              </div>
             ) : (
-              <>
-                <span>{task}</span>
-                <button onClick={() => handleEdit(task ,index)}>
+              <div className="todo-items">
+               <div className="bullet">•</div> <span>{task}</span>
+                <Button className="p-1 mx-1" outline={true} color="secondary" onClick={() => handleEdit(task ,index)}>
                   <Pen />
-                </button>
-                <button onClick={() => handleDelete(index)}>
+                </Button>
+                <Button  className="p-1 mx-1"outline={true} color="secondary"  onClick={() => handleDelete(index)}>
                   <Trash />
-                </button>
-              </>
+                </Button>
+              </div>
             )}
           </div>
         ))}
-
-        <pre>{JSON.stringify(tasks, null, 2)}</pre>
       </div>
     </div>
   );
